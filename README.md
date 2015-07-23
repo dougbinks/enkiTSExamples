@@ -10,11 +10,11 @@ This repository hosts extended examples.
 
 This example shows how to use [Remotery](https://github.com/Celtoys/Remotery) with [enkiTS](https://github.com/dougbinks/enkiTS/).
 
+![screenshot](images/enkiTSRemoteryExample.png?raw=true)
+
 ## [enkiTSRemoteryExample.c](enkiTSRemoteryExample.c)
 
 As above but using the C interface.
-
-![screenshot](images/enkiTSRemoteryExample.png?raw=true)
 
 ## License (zlib)
 
