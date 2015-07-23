@@ -1,0 +1,6 @@
+[submodule "enkiTS"]
+	path = enkiTS
+	url = https://github.com/dougbinks/enkiTS
+[submodule "Remotery"]
+	path = Remotery
+	url = https://github.com/Celtoys/Remotery
