@@ -101,6 +101,8 @@ int main(int argc, const char * argv[])
 
 	pETS = enkiCreateTaskScheduler();
 
+	rmt_SetCurrentThreadName("Main");
+
 	pPSumTask			= enkiCreateTaskSet( pETS, ParallelSumTaskSetFunc );
 	pPSumReductionTask	= enkiCreateTaskSet( pETS, ParallelReductionSumTaskSet );
 

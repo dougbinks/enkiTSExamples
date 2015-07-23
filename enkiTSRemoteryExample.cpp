@@ -106,6 +106,8 @@ int main(int argc, const char * argv[])
 
 	g_TS.Initialize();
 
+	rmt_SetCurrentThreadName("Main");
+
 	double avSpeedUp = 0.0;
 	for( int run = 0; run< RUNS; ++run )
 	{
