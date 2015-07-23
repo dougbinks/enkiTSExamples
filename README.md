@@ -6,6 +6,12 @@
 
 This repository hosts extended examples.
 
+## [enkiTSRemoteryExample.cpp](enkiTSRemoteryExample.cpp)
+
+This example shows how to use [Remotery](https://github.com/Celtoys/Remotery) with enkiTS.
+
+![screenshot](images/enkiTSRemoteryExample.png?raw=true)
+
 ## License (zlib)
 
 Copyright (c) 2013 Doug Binks
