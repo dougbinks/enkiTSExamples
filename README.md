@@ -1,4 +1,4 @@
-# enkiTS Examples
+# [enkiTS](https://github.com/dougbinks/enkiTS/) Examples
 
 ## enki Task Scheduler Extended Samples
 
@@ -8,7 +8,7 @@ This repository hosts extended examples.
 
 ## [enkiTSRemoteryExample.cpp](enkiTSRemoteryExample.cpp)
 
-This example shows how to use [Remotery](https://github.com/Celtoys/Remotery) with enkiTS.
+This example shows how to use [Remotery](https://github.com/Celtoys/Remotery) with [enkiTS](https://github.com/dougbinks/enkiTS/).
 
 ![screenshot](images/enkiTSRemoteryExample.png?raw=true)
 
