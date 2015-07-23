@@ -21,12 +21,9 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>
+#include <string.h>
 
 #include "Remotery.h"
-
-#ifndef _WIN32
-	#include <string.h>
-#endif
 
 using namespace enki;
 
@@ -99,7 +96,8 @@ struct ParallelReductionSumTaskSet : ITaskSet
 	}
 };
 
-static const int RUNS		= 1024*1024;
+static const int RUNS = 1024*1024;
+static const int SUMS = 10*1024*1024;
 
 int main(int argc, const char * argv[])
 {
@@ -114,7 +112,7 @@ int main(int argc, const char * argv[])
 		rmt_ScopedCPUSample(Run);
 
 		printf("Run %d.....\n", run);
-		ParallelReductionSumTaskSet m_ParallelReductionSumTaskSet(100 * 1024 * 1024);
+		ParallelReductionSumTaskSet m_ParallelReductionSumTaskSet( SUMS );
 		{
 			rmt_ScopedCPUSample(Parallel);
 
