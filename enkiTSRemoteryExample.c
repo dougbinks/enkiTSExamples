@@ -123,6 +123,7 @@ static const int SUMS = 10 * 1024 * 1024;
 
 int main(int argc, const char * argv[])
 {
+    int run;
 	uint64_t inMax_outSum, i;
     volatile uint64_t serialSum;
 	Remotery* rmt;
@@ -142,7 +143,7 @@ int main(int argc, const char * argv[])
 	pPSumTask			= enkiCreateTaskSet( pETS, ParallelSumTaskSetFunc );
 	pPSumReductionTask	= enkiCreateTaskSet( pETS, ParallelReductionSumTaskSet );
 
-	for (int run = 0; run < RUNS; ++run)
+	for (run = 0; run < RUNS; ++run)
 	{
 		rmt_BeginCPUSample(Run);
 
