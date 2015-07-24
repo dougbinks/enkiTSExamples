@@ -94,7 +94,8 @@ static const int SUMS = 10 * 1024 * 1024;
 
 int main(int argc, const char * argv[])
 {
-	uint64_t inMax_outSum, i, serialSum;
+	uint64_t inMax_outSum, i;
+    volatile uint64_t serialSum;
 	Remotery* rmt;
 
 	rmt_CreateGlobalInstance(&rmt);

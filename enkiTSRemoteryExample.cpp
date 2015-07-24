@@ -161,7 +161,7 @@ int main(int argc, const char * argv[])
 
 
 
-		uint64_t sum = 0;
+		volatile uint64_t sum = 0;
 		{
 			rmt_ScopedCPUSample(Serial);
 			for (uint64_t i = 0; i < (uint64_t)m_ParallelReductionSumTaskSet.m_ParallelSumTaskSet.m_SetSize; ++i)
