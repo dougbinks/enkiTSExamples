@@ -10,20 +10,20 @@ set( ENKITS_BUILD_EXAMPLES OFF CACHE BOOL "Build basic example applications")
 add_subdirectory( enkiTS )
 
 set( ENKITSREMOTERYSAMPLE_SRC
-     EnkiTSRemoteryExample.cpp
+     enkiTSRemoteryExample.cpp
      Remotery/lib/Remotery.h
      Remotery/lib/Remotery.c
      )
 	 
-add_executable( EnkiTSRemoteryExample ${ENKITSREMOTERYSAMPLE_SRC} )
-target_link_libraries(EnkiTSRemoteryExample enkiTS )
+add_executable( enkiTSRemoteryExample ${ENKITSREMOTERYSAMPLE_SRC} )
+target_link_libraries(enkiTSRemoteryExample enkiTS )
 
 if( ENKITS_BUILD_C_INTERFACE )
 	set( ENKITSREMOTERYSAMPLE_C_SRC
-		 EnkiTSRemoteryExample.c
+		 enkiTSRemoteryExample.c
 		 Remotery/lib/Remotery.h
 		 Remotery/lib/Remotery.c
 		 )
-	add_executable( EnkiTSRemoteryExample_C ${ENKITSREMOTERYSAMPLE_C_SRC} )
-	target_link_libraries(EnkiTSRemoteryExample_C enkiTS )
+	add_executable( enkiTSRemoteryExample_C ${ENKITSREMOTERYSAMPLE_C_SRC} )
+	target_link_libraries(enkiTSRemoteryExample_C enkiTS )
 endif()	
