@@ -10,6 +10,8 @@ This repository hosts extended examples.
 
 This example shows how to use [Remotery](https://github.com/Celtoys/Remotery) with [enkiTS](https://github.com/dougbinks/enkiTS/).
 
+Note that currently in release the sums might be optimized away.
+
 ![screenshot](images/enkiTSRemoteryExample.png?raw=true)
 
 ## [enkiTSRemoteryExample.c](enkiTSRemoteryExample.c)
