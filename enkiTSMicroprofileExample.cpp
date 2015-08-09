@@ -188,13 +188,34 @@ void threadStartCallback( uint32_t threadnum_ )
     MicroProfileOnThreadCreate( nameTable[ nameNum ]  );
 }
 
+#if 0 ==  MICROPROFILE_ENABLED
+void waitStartCallback( uint32_t threadnum_ ){}
+void waitStopCallback( uint32_t threadnum_ ) {}
+void profilerInit() {}
+#else
+// following is somewhat difficult way to get wait callbacks working
+MicroProfileToken g_ProfileWait = MicroProfileGetToken( "enkiTS", "Wait", 0xFF505000, MicroProfileTokenTypeCpu);
+
+struct TickStore
+{
+    TickStore() : pTicks(NULL) {}
+    ~TickStore() { delete[] pTicks; }
+    uint64_t* pTicks;
+} g_Ticks;
+void profilerInit()
+{
+    g_Ticks.pTicks = new uint64_t[ g_TS.GetNumTaskThreads() ];
+}
 void waitStartCallback( uint32_t threadnum_ )
 {
+    g_Ticks.pTicks[ threadnum_ ] = MicroProfileEnter( g_ProfileWait );
 }
 
 void waitStopCallback( uint32_t threadnum_ )
 {
+    MicroProfileLeave( g_ProfileWait, g_Ticks.pTicks[ threadnum_ ] );
 }
+#endif
 
 static const int SUMS = 10*1024*1024;
 
@@ -222,7 +243,7 @@ int main(int argc, const char * argv[])
     g_TS.GetProfilerCallbacks()->waitStop       = waitStopCallback;
 
 	g_TS.Initialize();
-
+    profilerInit();
 
 	double avSpeedUp = 0.0;
     ImVec4 clear_color = ImColor(114, 144, 154);
