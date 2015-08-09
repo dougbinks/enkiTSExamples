@@ -5,6 +5,7 @@ project( enkiTSExamples )
 include_directories("enkiTS/src")
 include_directories("Remotery/lib")
 include_directories("imgui")
+include_directories("microprofile")
 include_directories("glfw/include")
 include_directories("imgui/examples/opengl_example")
 
@@ -38,6 +39,8 @@ endif()
 
 
 set( ENKITSMICROPROFILESAMPLE_SRC
+	 microprofile/microprofile.h
+ 	 microprofile/microprofileui.h
      imgui/imgui.h
      imgui/imgui.cpp
      imgui/imgui_internal.h
@@ -46,7 +49,7 @@ set( ENKITSMICROPROFILESAMPLE_SRC
 	 imgui/imconfig.h
      imgui/examples/opengl_example/imgui_impl_glfw.h
      imgui/examples/opengl_example/imgui_impl_glfw.cpp
-     imgui/examples/opengl_example/main.cpp
+     enkiTSMicroprofileExample.cpp
      )
 add_executable( enkiTSMicroprofileExample ${ENKITSMICROPROFILESAMPLE_SRC} )
 target_link_libraries(enkiTSMicroprofileExample enkiTS opengl32 glfw )
