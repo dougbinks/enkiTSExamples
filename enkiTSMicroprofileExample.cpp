@@ -46,7 +46,6 @@ uint64_t MicroProfileTicksPerSecondGpu() { return 1; }
 int MicroProfileGetGpuTickReference(int64_t* pOutCPU, int64_t* pOutGpu) { return 0; }
 
 // UI functions
-
 static ImDrawList*  g_pImDraw = 0;
 static ImVec2       g_DrawPos;
 void MicroProfileDrawText(int nX, int nY, uint32_t nColor, const char* pText, uint32_t nNumCharacters)
@@ -59,9 +58,20 @@ void MicroProfileDrawBox(int nX, int nY, int nX1, int nY1, uint32_t nColor, Micr
     switch( boxType )
     {
     case MicroProfileBoxTypeBar:
-        g_pImDraw->AddRectFilled(ImVec2(nX + g_DrawPos.x,nY + g_DrawPos.y ),
-                                 ImVec2(nX1 + g_DrawPos.x,nY1 + g_DrawPos.y ), nColor, 1.0f );
+    {
+        uint32_t cul = nColor; 
+        uint32_t cur = ( nColor & 0x00FFFFFF ) + 0xFF000000; 
+        uint32_t clr = ( nColor & 0x00FFFFFF ) + 0x50000000; 
+        uint32_t cll = ( nColor & 0x00FFFFFF ) + 0x50000000; 
+        g_pImDraw->AddRectFilledMultiColor(ImVec2(nX + g_DrawPos.x,nY + g_DrawPos.y ),
+                                 ImVec2(nX1 + g_DrawPos.x,nY1 + g_DrawPos.y ), cul, cur, clr, cll );
+        if( nX1 - nX > 5 )
+        {
+            g_pImDraw->AddRect(ImVec2(nX + g_DrawPos.x,nY + g_DrawPos.y ),
+                 ImVec2(nX1 + g_DrawPos.x,nY1 + g_DrawPos.y ), 0x50000000 );
+        }
         break;
+    }
     case MicroProfileBoxTypeFlat:
         g_pImDraw->AddRectFilled(ImVec2(nX + g_DrawPos.x,nY + g_DrawPos.y ),
                                  ImVec2(nX1 + g_DrawPos.x,nY1 + g_DrawPos.y ), nColor );
