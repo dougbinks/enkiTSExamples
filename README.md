@@ -1,5 +1,7 @@
 # [enkiTS](https://github.com/dougbinks/enkiTS/) Examples
 
+NOTE: OS X Compiles currently not working well due to different target C++11 requirements. Investigating best solution.
+
 ## enki Task Scheduler Extended Samples
 
 [enkiTS](https://github.com/dougbinks/enkiTS/) is a permissively licensed C and C++ Task Scheduler for creating parallel programs.
