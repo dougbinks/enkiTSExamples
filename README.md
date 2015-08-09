@@ -20,7 +20,7 @@ As above but using the C interface.
 
 ## [enkiTSMicroprofileExample.cpp](enkiTSMicroprofileExample.cpp)
 
-This example shows how to use [microprofile](https://github.com/dougbinks/microprofile with [enkiTS](https://github.com/dougbinks/enkiTS/).
+This example shows how to use [microprofile](https://github.com/dougbinks/microprofile) with [enkiTS](https://github.com/dougbinks/enkiTS/).
 
 ![Microprofile Screenshot](images/enkiTSMicroprofileExample.png?raw=true)
 
