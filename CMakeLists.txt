@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project( enkiTSExamples )
 
+find_package(OpenGL REQUIRED)
+
 include_directories("enkiTS/src")
 include_directories("Remotery/lib")
 include_directories("imgui")
@@ -61,4 +63,4 @@ set( ENKITSMICROPROFILESAMPLE_SRC
      enkiTSMicroprofileExample.cpp
      )
 add_executable( enkiTSMicroprofileExample ${ENKITSMICROPROFILESAMPLE_SRC} )
-target_link_libraries(enkiTSMicroprofileExample enkiTS opengl32 glfw )
+target_link_libraries(enkiTSMicroprofileExample enkiTS glfw ${GLFW_LIBRARIES} )
