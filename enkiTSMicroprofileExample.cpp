@@ -34,6 +34,8 @@
 #define MICROPROFILEUI_IMPL
 #define MICROPROFILE_WEBSERVER 0
 #define MICROPROFILE_CONTEXT_SWITCH_TRACE 0
+#define MICROPROFILE_TEXT_HEIGHT 12
+#define MICROPROFILE_TEXT_WIDTH 7
 #include "microprofile.h"
 #include "microprofileui.h"
 
@@ -54,7 +56,19 @@ void MicroProfileDrawText(int nX, int nY, uint32_t nColor, const char* pText, ui
 
 void MicroProfileDrawBox(int nX, int nY, int nX1, int nY1, uint32_t nColor, MicroProfileBoxType boxType )
 {
-    g_pImDraw->AddRectFilled(  ImVec2(nX + g_DrawPos.x,nY + g_DrawPos.y ),  ImVec2(nX1 + g_DrawPos.x,nY1 + g_DrawPos.y ), nColor );
+    switch( boxType )
+    {
+    case MicroProfileBoxTypeBar:
+        g_pImDraw->AddRectFilled(ImVec2(nX + g_DrawPos.x,nY + g_DrawPos.y ),
+                                 ImVec2(nX1 + g_DrawPos.x,nY1 + g_DrawPos.y ), nColor, 1.0f );
+        break;
+    case MicroProfileBoxTypeFlat:
+        g_pImDraw->AddRectFilled(ImVec2(nX + g_DrawPos.x,nY + g_DrawPos.y ),
+                                 ImVec2(nX1 + g_DrawPos.x,nY1 + g_DrawPos.y ), nColor );
+        break;
+    default:
+        assert(false);
+    }
 }
 
 void MicroProfileDrawLine2D(uint32_t nVertices, float* pVertices, uint32_t nColor)
@@ -243,7 +257,6 @@ int main(int argc, const char * argv[])
             ImGui::SetNextWindowSize(size);
             ImGui::SetNextWindowPos(ImVec2(10,10));
             ImGui::Begin("Microprofile", &showWindow, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoMove);
-            ImGui::SetWindowFontScale( 0.88f );
                 
             g_pImDraw = ImGui::GetWindowDrawList();
             g_DrawPos = ImGui::GetCursorPos();
