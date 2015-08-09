@@ -4,3 +4,12 @@
 [submodule "Remotery"]
 	path = Remotery
 	url = https://github.com/Celtoys/Remotery
+[submodule "microprofile"]
+	path = microprofile
+	url = https://github.com/dougbinks/microprofile
+[submodule "imgui"]
+	path = imgui
+	url = https://github.com/ocornut/imgui
+[submodule "glfw"]
+	path = glfw
+	url = https://github.com/glfw/glfw.git
