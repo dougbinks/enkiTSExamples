@@ -100,7 +100,7 @@ struct ParallelSumTaskSet : ITaskSet
 
 	void Init()
 	{
-        MICROPROFILE_SCOPEI("Parallel", "SumInit", 0xFF00FF00 );
+        MICROPROFILE_SCOPEI("Parallel", "SumInit", 0xFF008800 );
         delete[] m_pPartialSums;
 		m_NumPartialSums = g_TS.GetNumTaskThreads();
 		m_pPartialSums = new Count[ m_NumPartialSums ];
@@ -109,7 +109,7 @@ struct ParallelSumTaskSet : ITaskSet
 
 	virtual void    ExecuteRange( TaskSetPartition range, uint32_t threadnum )
 	{
-        MICROPROFILE_SCOPEI("Parallel", "SumTask", 0xFF00FF00 );
+        MICROPROFILE_SCOPEI("Parallel", "SumTask", 0xFF00D000 );
 		assert( m_pPartialSums && m_NumPartialSums );
 		uint64_t sum = m_pPartialSums[threadnum].count;
 		for( uint64_t i = range.start; i < range.end; ++i )
@@ -135,7 +135,7 @@ struct ParallelReductionSumTaskSet : ITaskSet
 
 	virtual void    ExecuteRange( TaskSetPartition range, uint32_t threadnum )
 	{
-        MICROPROFILE_SCOPEI("Parallel", "ReductionTask", 0xFF00FF00 );
+        MICROPROFILE_SCOPEI("Parallel", "ReductionTask", 0xFF20C000 );
         g_TS.AddTaskSetToPipe( &m_ParallelSumTaskSet );
 		g_TS.WaitforTaskSet( &m_ParallelSumTaskSet );
 
@@ -229,7 +229,7 @@ int main(int argc, const char * argv[])
 
 		volatile uint64_t sum = 0;
 		{
-            MICROPROFILE_SCOPEI("Serial", "Sum", 0xFF0000FF );
+            MICROPROFILE_SCOPEI("Serial", "Sum", 0xFF0000D0 );
             for (uint64_t i = 0; i < (uint64_t)m_ParallelReductionSumTaskSet.m_ParallelSumTaskSet.m_SetSize; ++i)
 			{
 				sum += i + 1;
@@ -239,16 +239,17 @@ int main(int argc, const char * argv[])
         if (showWindow)
         {
             MicroProfileFlip();
-            ImVec2 size(300,300);
-            ImGui::SetNextWindowSize(size, ImGuiSetCond_FirstUseEver);
-            ImGui::Begin("Microprofile");
+            ImVec2 size(1200,700);
+            ImGui::SetNextWindowSize(size);
+            ImGui::SetNextWindowPos(ImVec2(10,10));
+            ImGui::Begin("Microprofile", &showWindow, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoMove);
             ImGui::SetWindowFontScale( 0.88f );
                 
             g_pImDraw = ImGui::GetWindowDrawList();
             g_DrawPos = ImGui::GetCursorPos();
             ImVec2 sizeForMicroDraw = ImGui::GetWindowSize();
-            //sizeForMicroDraw.x -= g_DrawPos.x;
-            //sizeForMicroDraw.y -= g_DrawPos.y;
+            sizeForMicroDraw.x -= g_DrawPos.x;
+            sizeForMicroDraw.y -= g_DrawPos.y;
             ImVec2 windowoffset = ImGui::GetWindowPos();
             g_DrawPos.x += windowoffset.x;
             g_DrawPos.y += windowoffset.y;
