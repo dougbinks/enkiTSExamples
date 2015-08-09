@@ -37,6 +37,15 @@ if( ENKITS_BUILD_C_INTERFACE )
 	target_link_libraries(enkiTSRemoteryExample_C enkiTS )
 endif()
 
+if(UNIX)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+if(APPLE)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif()
+if(WIN32)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /d2Zi+" )
+endif()
 
 set( ENKITSMICROPROFILESAMPLE_SRC
 	 microprofile/microprofile.h
