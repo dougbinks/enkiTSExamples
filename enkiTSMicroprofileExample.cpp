@@ -241,12 +241,6 @@ int main(int argc, const char * argv[])
         glfwPollEvents();
         ImGui_ImplGlfw_NewFrame();
 
-        double mouseX, mouseY;
-        glfwGetCursorPos( window, &mouseX , &mouseY );
-        MicroProfileMouseButton( glfwGetMouseButton( window, 0 ), glfwGetMouseButton( window, 1 ));
-        
-        MicroProfileMousePosition(mouseX- g_DrawPos.x, mouseY - g_DrawPos.y, ImGui::GetIO().MouseWheel );
-
 
 		ParallelReductionSumTaskSet m_ParallelReductionSumTaskSet( SUMS );
 		{
@@ -272,20 +266,27 @@ int main(int argc, const char * argv[])
         if (showWindow)
         {
             MicroProfileFlip();
-            ImVec2 size(1200,700);
-            ImGui::SetNextWindowSize(size);
-            ImGui::SetNextWindowPos(ImVec2(10,10));
-            ImGui::Begin("Microprofile", &showWindow, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoMove);
+            ImGui::SetNextWindowSize(ImVec2(1200,700), ImGuiSetCond_FirstUseEver);
+            ImGui::SetNextWindowPos(ImVec2(10,10), ImGuiSetCond_FirstUseEver);
+            ImGui::Begin("Microprofile", &showWindow );
                 
             g_pImDraw = ImGui::GetWindowDrawList();
-            g_DrawPos = ImGui::GetCursorPos();
-            ImVec2 sizeForMicroDraw = ImGui::GetWindowSize();
-            sizeForMicroDraw.x -= g_DrawPos.x;
-            sizeForMicroDraw.y -= g_DrawPos.y;
-            ImVec2 windowoffset = ImGui::GetWindowPos();
-            g_DrawPos.x += windowoffset.x;
-            g_DrawPos.y += windowoffset.y;
+            g_DrawPos = ImGui::GetCursorScreenPos();
+
+
+            ImVec2 sizeForMicroDraw = ImGui::GetContentRegionAvail();
+            ImGui::InvisibleButton("canvas", sizeForMicroDraw);
+            if (ImGui::IsItemHovered())
+            {
+                MicroProfileMouseButton( ImGui::GetIO().MouseDown[0], ImGui::GetIO().MouseDown[1] );       
+            }
+            else
+            {
+                MicroProfileMouseButton( 0, 0 );       
+            }
+            MicroProfileMousePosition(ImGui::GetIO().MousePos.x- g_DrawPos.x, ImGui::GetIO().MousePos.y - g_DrawPos.y, ImGui::GetIO().MouseWheel );
             MicroProfileDraw(sizeForMicroDraw.x, sizeForMicroDraw.y);
+
             ImGui::End();
         }
 
