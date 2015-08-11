@@ -1,7 +1,5 @@
 # [enkiTS](https://github.com/dougbinks/enkiTS/) Examples
 
-**NOTE: OS X Compiles on older OSs may not work for Remotery example** - [patch in progress](https://github.com/Celtoys/Remotery/pull/61).
-
 ## enki Task Scheduler Extended Samples
 
 [enkiTS](https://github.com/dougbinks/enkiTS/) is a permissively licensed C and C++ Task Scheduler for creating parallel programs.
