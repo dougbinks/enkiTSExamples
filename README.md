@@ -1,6 +1,6 @@
 # [enkiTS](https://github.com/dougbinks/enkiTS/) Examples
 
-**NOTE: OS X Compiles currently not working well due to different target C++11 requirements.** Investigating best solution, until then a workaround is to run cmake & make once, then remove C++11 flags from cmake and run again to get all targets to compile.
+**NOTE: OS X Compiles on older OSs may not work for Remotery example** - [patch in progress](https://github.com/Celtoys/Remotery/pull/61).
 
 ## enki Task Scheduler Extended Samples
 
