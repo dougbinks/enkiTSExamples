@@ -224,6 +224,10 @@ int main(int argc, const char * argv[])
     MicroProfileInitUI();
     MicroProfileOnThreadCreate("Main");
 
+    // setup profile default settings
+    MicroProfile& profiler = *MicroProfileGet();
+    profiler.nDisplay = MP_DRAW_DETAILED;
+    profiler.nAllGroupsWanted = 1;
 
     // Set the callbacks BEFORE initialize or we will get no threadstart nor first waitStart calls
     g_TS.GetProfilerCallbacks()->threadStart    = threadStartCallback;
