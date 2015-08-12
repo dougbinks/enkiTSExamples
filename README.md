@@ -32,6 +32,8 @@ As above but using the C interface.
 
 This example shows how to use [microprofile](https://github.com/dougbinks/microprofile) with [enkiTS](https://github.com/dougbinks/enkiTS/).
 
+To view context switching on Windows, run the application (or Visual Studio if launching from that) as administrator and set Options->Cswitch Trace->Enable on.
+
 ![Microprofile Screenshot](images/enkiTSMicroprofileExample.png?raw=true)
 
 ## License (zlib)
