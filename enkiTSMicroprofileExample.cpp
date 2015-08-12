@@ -235,7 +235,6 @@ int main(int argc, const char * argv[])
 
 	double avSpeedUp = 0.0;
     ImVec4 clear_color = ImColor(114, 144, 154);
-    bool showWindow = true;
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
@@ -263,12 +262,12 @@ int main(int argc, const char * argv[])
 			}
 		}
 
-        if (showWindow)
+        if(true)
         {
             MicroProfileFlip();
             ImGui::SetNextWindowSize(ImVec2(1200,700), ImGuiSetCond_FirstUseEver);
             ImGui::SetNextWindowPos(ImVec2(10,10), ImGuiSetCond_FirstUseEver);
-            ImGui::Begin("Microprofile", &showWindow );
+            ImGui::Begin( "Microprofile" );
                 
             g_pImDraw = ImGui::GetWindowDrawList();
             g_DrawPos = ImGui::GetCursorScreenPos();
@@ -284,7 +283,7 @@ int main(int argc, const char * argv[])
             {
                 MicroProfileMouseButton( 0, 0 );       
             }
-            MicroProfileMousePosition(ImGui::GetIO().MousePos.x- g_DrawPos.x, ImGui::GetIO().MousePos.y - g_DrawPos.y, ImGui::GetIO().MouseWheel );
+            MicroProfileMousePosition((uint32_t)(ImGui::GetIO().MousePos.x- g_DrawPos.x), (uint32_t)(ImGui::GetIO().MousePos.y - g_DrawPos.y), (int)ImGui::GetIO().MouseWheel );
             MicroProfileDraw(sizeForMicroDraw.x, sizeForMicroDraw.y);
 
             ImGui::End();
