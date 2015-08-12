@@ -1,6 +1,6 @@
 # [enkiTS](https://github.com/dougbinks/enkiTS/) Examples
 
-**Submodules are licensed under their own licenses, see thir contents for details**
+**Submodules are licensed under their own licenses, see thier contents for details**
 
 ## Building
 
