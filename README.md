@@ -1,5 +1,13 @@
 # [enkiTS](https://github.com/dougbinks/enkiTS/) Examples
 
+## Building
+
+First [make sure you've cloned all submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules#Cloning-a-Project-with-Submodules). On Windows / Mac OS X / Linux with cmake installed, open a prompt in the enkiTS directory and:
+
+1. `mkdir build`
+2. `cmake ..`
+3. either run `make` or open `enkiTS.sln`
+
 ## enki Task Scheduler Extended Samples
 
 [enkiTS](https://github.com/dougbinks/enkiTS/) is a permissively licensed C and C++ Task Scheduler for creating parallel programs.
