@@ -1,5 +1,7 @@
 # [enkiTS](https://github.com/dougbinks/enkiTS/) Examples
 
+**Submodules are licensed under their own licenses, see thir contents for details**
+
 ## Building
 
 First [make sure you've cloned all submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules#Cloning-a-Project-with-Submodules). On Windows / Mac OS X / Linux with cmake installed, open a prompt in the enkiTS directory and:
