@@ -35,14 +35,10 @@
 #define MICROPROFILE_WEBSERVER 0
 #define MICROPROFILE_TEXT_HEIGHT 12
 #define MICROPROFILE_TEXT_WIDTH 7
+#define MICROPROFILE_GPU_TIMERS 0
 #include "microprofile.h"
 #include "microprofileui.h"
 
-// define GPU queries as NULL
-uint32_t MicroProfileGpuInsertTimeStamp() { return 0; }
-uint64_t MicroProfileGpuGetTimeStamp(uint32_t nKey) { return 0; }
-uint64_t MicroProfileTicksPerSecondGpu() { return 1; }
-int MicroProfileGetGpuTickReference(int64_t* pOutCPU, int64_t* pOutGpu) { return 0; }
 
 // UI functions
 static ImDrawList*  g_pImDraw = 0;
@@ -268,7 +264,7 @@ int main(int argc, const char * argv[])
 
         if(true)
         {
-            MicroProfileFlip();
+            MicroProfileFlip(NULL);
             ImGui::SetNextWindowSize(ImVec2(1200,700), ImGuiSetCond_FirstUseEver);
             ImGui::SetNextWindowPos(ImVec2(10,10), ImGuiSetCond_FirstUseEver);
             ImGui::Begin( "Microprofile" );
