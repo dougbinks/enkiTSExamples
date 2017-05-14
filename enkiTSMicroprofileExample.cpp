@@ -197,17 +197,27 @@ struct TickStore
     ~TickStore() { delete[] pTicks; }
     uint64_t* pTicks;
 } g_Ticks;
+
 void profilerInit()
 {
     g_Ticks.pTicks = new uint64_t[ g_TS.GetNumTaskThreads() ];
 }
 void waitStartCallback( uint32_t threadnum_ )
 {
+    if (!g_Ticks.pTicks) {
+      // g_Ticks not yet initialized.
+      return;
+    }
+
     g_Ticks.pTicks[ threadnum_ ] = MicroProfileEnter( g_ProfileWait );
 }
 
 void waitStopCallback( uint32_t threadnum_ )
 {
+    if (!g_Ticks.pTicks) {
+      // g_Ticks not yet initialized.
+      return;
+    }
     MicroProfileLeave( g_ProfileWait, g_Ticks.pTicks[ threadnum_ ] );
 }
 #endif
