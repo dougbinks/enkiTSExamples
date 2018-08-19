@@ -206,8 +206,9 @@ struct TickStore
 
 void profilerInit()
 {
-    g_Ticks.pTicks = new uint64_t[ g_TS.GetNumTaskThreads() ];
+    g_Ticks.pTicks = new uint64_t[ enki::GetNumHardwareThreads() ];
 }
+
 void waitStartCallback( uint32_t threadnum_ )
 {
     if (!g_Ticks.pTicks) {
@@ -257,8 +258,8 @@ int main(int argc, const char * argv[])
     g_TS.GetProfilerCallbacks()->waitStart      = waitStartCallback;
     g_TS.GetProfilerCallbacks()->waitStop       = waitStopCallback;
 
-	g_TS.Initialize();
     profilerInit();
+	g_TS.Initialize();
 
 	double avSpeedUp = 0.0;
     ImVec4 clear_color = ImColor(114, 144, 154);
