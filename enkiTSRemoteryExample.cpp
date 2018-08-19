@@ -161,6 +161,7 @@ int main(int argc, const char * argv[])
 		}
 
 	}
+    g_TS.WaitforAllAndShutdown();
 	rmt_DestroyGlobalInstance(rmt);
 	return 0;
 }
