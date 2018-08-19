@@ -40,6 +40,7 @@
 
 #include <imgui.h>
 #include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl2.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 
@@ -237,11 +238,20 @@ int main(int argc, const char * argv[])
     glfwSetErrorCallback(error_callback);
     if (!glfwInit())
         exit(1);
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "ImGui OpenGL2 example", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "enkiTS microprofile example", NULL, NULL);
     glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
 
-    // Setup ImGui binding
-    ImGui_ImplGlfw_Init(window, true);
+    // Setup Dear ImGui binding
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL2_Init();
+
+    // Setup style
+    ImGui::StyleColorsDark();
+
 
     // Set up Microprofile
     MicroProfileToggleDisplayMode();
@@ -266,7 +276,11 @@ int main(int argc, const char * argv[])
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
+
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
 
 		ParallelReductionSumTaskSet m_ParallelReductionSumTaskSet( SUMS );
@@ -321,13 +335,16 @@ int main(int argc, const char * argv[])
         glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui::Render();
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
 	}
 
 
     // Cleanup
     g_TS.WaitforAllAndShutdown();
+    ImGui_ImplOpenGL2_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     glfwTerminate();
 
 	return 0;

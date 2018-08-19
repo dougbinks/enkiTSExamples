@@ -9,7 +9,7 @@ include_directories("Remotery/lib")
 include_directories("imgui")
 include_directories("microprofile")
 include_directories("glfw/include")
-include_directories("imgui/examples/opengl_example")
+include_directories("imgui/examples")
 
 set( ENKITS_BUILD_EXAMPLES OFF CACHE BOOL "Build basic example applications" )
 set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL  "GLFW lib only" )
@@ -58,8 +58,10 @@ set( ENKITSMICROPROFILESAMPLE_SRC
      imgui/imgui_demo.cpp
      imgui/imgui_draw.cpp
 	 imgui/imconfig.h
-     imgui/examples/opengl_example/imgui_impl_glfw.h
-     imgui/examples/opengl_example/imgui_impl_glfw.cpp
+     imgui/examples/imgui_impl_glfw.h
+     imgui/examples/imgui_impl_glfw.cpp
+     imgui/examples/imgui_impl_opengl2.h
+     imgui/examples/imgui_impl_opengl2.cpp
      enkiTSMicroprofileExample.cpp
      )
 add_executable( enkiTSMicroprofileExample ${ENKITSMICROPROFILESAMPLE_SRC} )
