@@ -43,7 +43,7 @@ void ParallelSumTaskSetArgsInit( ParallelSumTaskSetArgs* pArgs_ )
 
 void ParallelSumTaskSetFunc( uint32_t start_, uint32_t end, uint32_t threadnum_, void* pArgs_ )
 {
-	rmt_BeginCPUSample(Sum);
+	rmt_BeginCPUSample(Sum, 0);
 
 	ParallelSumTaskSetArgs args;
 	uint64_t sum, i;
@@ -62,7 +62,7 @@ void ParallelSumTaskSetFunc( uint32_t start_, uint32_t end, uint32_t threadnum_,
 
 void ParallelReductionSumTaskSet(  uint32_t start_, uint32_t end, uint32_t threadnum_, void* pArgs_ )
 {
-	rmt_BeginCPUSample(Reduce);
+	rmt_BeginCPUSample(Reduce, 0);
 
 	ParallelSumTaskSetArgs args;
 	uint64_t sum;
@@ -110,7 +110,7 @@ void threadStartCallback( uint32_t threadnum_ )
 
 void waitStartCallback( uint32_t threadnum_ )
 {
-    rmt_BeginCPUSample(WAIT);
+    rmt_BeginCPUSample(WAIT, 0);
 }
 
 void waitStopCallback( uint32_t threadnum_ )
@@ -145,18 +145,18 @@ int main(int argc, const char * argv[])
 
 	for (run = 0; run < RUNS; ++run)
 	{
-		rmt_BeginCPUSample(Run);
+		rmt_BeginCPUSample(Run, 0);
 
 		printf("Run %d.....\n", run);
 
-		rmt_BeginCPUSample(Parallel);
+		rmt_BeginCPUSample(Parallel, 0);
 		inMax_outSum = SUMS;
 		enkiAddTaskSetToPipe(pETS, pPSumReductionTask, &inMax_outSum, 1);
 		enkiWaitForTaskSet(pETS, pPSumReductionTask);
 		rmt_EndCPUSample();
 
 
-		rmt_BeginCPUSample(Serial);
+		rmt_BeginCPUSample(Serial, 0);
 		serialSum = 0;
 		for (i = 0; i < SUMS; ++i)
 		{

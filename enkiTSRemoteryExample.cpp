@@ -59,7 +59,7 @@ struct ParallelSumTaskSet : ITaskSet
 
 	virtual void    ExecuteRange( TaskSetPartition range, uint32_t threadnum )
 	{
-		rmt_ScopedCPUSample(Sum);
+		rmt_ScopedCPUSample(Sum, 0);
 		assert( m_pPartialSums && m_NumPartialSums );
 		uint64_t sum = m_pPartialSums[threadnum].count;
 		for( uint64_t i = range.start; i < range.end; ++i )
@@ -85,7 +85,7 @@ struct ParallelReductionSumTaskSet : ITaskSet
 
 	virtual void    ExecuteRange( TaskSetPartition range, uint32_t threadnum )
 	{
-		rmt_ScopedCPUSample(Reduce);
+		rmt_ScopedCPUSample(Reduce, 0);
 
 		g_TS.AddTaskSetToPipe( &m_ParallelSumTaskSet );
 		g_TS.WaitforTaskSet( &m_ParallelSumTaskSet );
@@ -106,7 +106,7 @@ void threadStartCallback( uint32_t threadnum_ )
 
 void waitStartCallback( uint32_t threadnum_ )
 {
-    rmt_BeginCPUSample(WAIT);
+    rmt_BeginCPUSample(WAIT, 0);
 }
 
 void waitStopCallback( uint32_t threadnum_ )
@@ -135,12 +135,12 @@ int main(int argc, const char * argv[])
 	double avSpeedUp = 0.0;
 	for( int run = 0; run< RUNS; ++run )
 	{
-		rmt_ScopedCPUSample(Run);
+		rmt_ScopedCPUSample(Run, 0);
 
 		printf("Run %d.....\n", run);
 		ParallelReductionSumTaskSet m_ParallelReductionSumTaskSet( SUMS );
 		{
-			rmt_ScopedCPUSample(Parallel);
+			rmt_ScopedCPUSample(Parallel, 0);
 
 			m_ParallelReductionSumTaskSet.Init();
 
@@ -153,7 +153,7 @@ int main(int argc, const char * argv[])
 
 		volatile uint64_t sum = 0;
 		{
-			rmt_ScopedCPUSample(Serial);
+			rmt_ScopedCPUSample(Serial, 0);
 			for (uint64_t i = 0; i < (uint64_t)m_ParallelReductionSumTaskSet.m_ParallelSumTaskSet.m_SetSize; ++i)
 			{
 				sum += i + 1;
