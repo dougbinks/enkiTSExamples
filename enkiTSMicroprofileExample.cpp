@@ -173,7 +173,7 @@ struct ParallelReductionSumTaskSet : ITaskSet
 	{
         MICROPROFILE_SCOPEI("Parallel", "ReductionTask", 0xFF20C000 );
         g_TS.AddTaskSetToPipe( &m_ParallelSumTaskSet );
-		g_TS.WaitforTaskSet( &m_ParallelSumTaskSet );
+		g_TS.WaitforTask( &m_ParallelSumTaskSet );
 
 		for( uint32_t i = 0; i < m_ParallelSumTaskSet.m_NumPartialSums; ++i )
 		{
@@ -275,7 +275,7 @@ int main(int argc, const char * argv[])
 
 			g_TS.AddTaskSetToPipe(&m_ParallelReductionSumTaskSet);
 
-			g_TS.WaitforTaskSet(&m_ParallelReductionSumTaskSet);
+			g_TS.WaitforTask(&m_ParallelReductionSumTaskSet);
 		}
 
 
