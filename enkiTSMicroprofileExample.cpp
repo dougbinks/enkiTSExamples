@@ -16,6 +16,19 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
+#ifdef _WIN32
+    #pragma warning(disable:4996)
+#endif
+#define MICROPROFILE_IMPL
+#define MICROPROFILEUI_IMPL
+#define MICROPROFILE_WEBSERVER 0
+#define MICROPROFILE_TEXT_HEIGHT 12
+#define MICROPROFILE_TEXT_WIDTH 7
+#define MICROPROFILE_GPU_TIMERS 0
+#define NOMINMAX
+#include "microprofile.h"
+#include "microprofileui.h"
+
 #include "TaskScheduler.h"
 
 #include <stdio.h>
@@ -30,14 +43,7 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 
-#define MICROPROFILE_IMPL
-#define MICROPROFILEUI_IMPL
-#define MICROPROFILE_WEBSERVER 0
-#define MICROPROFILE_TEXT_HEIGHT 12
-#define MICROPROFILE_TEXT_WIDTH 7
-#define MICROPROFILE_GPU_TIMERS 0
-#include "microprofile.h"
-#include "microprofileui.h"
+
 
 
 // UI functions
@@ -317,7 +323,9 @@ int main(int argc, const char * argv[])
         glfwSwapBuffers(window);
 	}
 
+
     // Cleanup
+    g_TS.WaitforAllAndShutdown();
     ImGui_ImplGlfw_Shutdown();
     glfwTerminate();
 
