@@ -1,3 +1,7 @@
+Support development of enkiTS through our [Patreon](https://www.patreon.com/enkisoftware)
+
+[<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="Become a Patron" width="150"/>](https://www.patreon.com/enkisoftware)
+
 # [enkiTS](https://github.com/dougbinks/enkiTS/) Examples
 
 **Submodules are licensed under their own licenses, see their contents for details**
