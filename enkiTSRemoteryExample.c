@@ -110,17 +110,17 @@ void threadStartCallback( uint32_t threadnum_ )
 
 void waitForNewTaskSuspendStartCallback( uint32_t threadnum_ )
 {
-    rmt_BeginCPUSample(WAIT, 0);
+    rmt_BeginCPUSample(WaitForNewTaskSuspend, 0);
 }
 
 void waitForTaskCompleteStartCallback( uint32_t threadnum_ )
 {
-    rmt_BeginCPUSample(WAIT, 0);
+    rmt_BeginCPUSample(WaitForTaskComplete, 0);
 }
 
 void waitForTaskCompleteSuspendStartCallback( uint32_t threadnum_ )
 {
-    rmt_BeginCPUSample(WAIT, 0);
+    rmt_BeginCPUSample(WaitForTaskCompleteSuspend, 0);
 }
 
 void stopCallback( uint32_t threadnum_ )
