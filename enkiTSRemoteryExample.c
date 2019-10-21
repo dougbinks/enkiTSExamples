@@ -108,12 +108,22 @@ void threadStartCallback( uint32_t threadnum_ )
     rmt_SetCurrentThreadName( nameTable[ nameNum ] );
 }
 
-void waitStartCallback( uint32_t threadnum_ )
+void waitForNewTaskSuspendStartCallback( uint32_t threadnum_ )
 {
     rmt_BeginCPUSample(WAIT, 0);
 }
 
-void waitStopCallback( uint32_t threadnum_ )
+void waitForTaskCompleteStartCallback( uint32_t threadnum_ )
+{
+    rmt_BeginCPUSample(WAIT, 0);
+}
+
+void waitForTaskCompleteSuspendStartCallback( uint32_t threadnum_ )
+{
+    rmt_BeginCPUSample(WAIT, 0);
+}
+
+void stopCallback( uint32_t threadnum_ )
 {
     rmt_EndCPUSample();
 }
@@ -132,9 +142,13 @@ int main(int argc, const char * argv[])
 
 	pETS = enkiNewTaskScheduler();
 
-    enkiGetProfilerCallbacks( pETS )->threadStart    = threadStartCallback;
-    enkiGetProfilerCallbacks( pETS )->waitStart      = waitStartCallback;
-    enkiGetProfilerCallbacks( pETS )->waitStop       = waitStopCallback;
+    enkiGetProfilerCallbacks( pETS )->threadStart                     = threadStartCallback;
+    enkiGetProfilerCallbacks( pETS )->waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
+    enkiGetProfilerCallbacks( pETS )->waitForNewTaskSuspendStop       = stopCallback;
+    enkiGetProfilerCallbacks( pETS )->waitForTaskCompleteStart        = waitForTaskCompleteStartCallback;
+    enkiGetProfilerCallbacks( pETS )->waitForTaskCompleteStop         = stopCallback;
+    enkiGetProfilerCallbacks( pETS )->waitForTaskCompleteSuspendStart = waitForTaskCompleteSuspendStartCallback;
+    enkiGetProfilerCallbacks( pETS )->waitForTaskCompleteSuspendStop  = stopCallback;
 
     enkiInitTaskScheduler( pETS );
 

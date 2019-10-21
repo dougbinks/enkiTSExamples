@@ -44,9 +44,6 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 
-
-
-
 // UI functions
 static ImDrawList*  g_pImDraw = 0;
 static ImVec2       g_DrawStart;
@@ -104,7 +101,6 @@ void MicroProfileDrawLine2D(uint32_t nVertices, float* pVertices, uint32_t nColo
         g_pImDraw->AddLine( posA, posB, nColor );
     }
 }
-
 
 static void error_callback(int error, const char* description)
 {
@@ -190,13 +186,7 @@ void threadStartCallback( uint32_t threadnum_ )
     MicroProfileOnThreadCreate( out.str().c_str()  );
 }
 
-#if 0 ==  MICROPROFILE_ENABLED
-void waitStartCallback( uint32_t threadnum_ ){}
-void waitStopCallback( uint32_t threadnum_ ) {}
-void profilerInit() {}
-#else
-// following is somewhat difficult way to get wait callbacks working
-MicroProfileToken g_ProfileWait = MicroProfileGetToken( "enkiTS", "Wait", 0xFF505000, MicroProfileTokenTypeCpu);
+// following is somewhat difficult way to get wait callbacks working, in a real application would a create macro
 
 struct TickStore
 {
@@ -210,25 +200,65 @@ void profilerInit()
     g_Ticks.pTicks = new uint64_t[ enki::GetNumHardwareThreads() ];
 }
 
-void waitStartCallback( uint32_t threadnum_ )
+MicroProfileToken g_ProfileWaitForNewTaskSuspend = MicroProfileGetToken( "enkiTS", "waitForNewTaskSuspend", 0xFF505000, MicroProfileTokenTypeCpu);
+void waitForNewTaskSuspendStartCallback( uint32_t threadnum_ )
 {
     if (!g_Ticks.pTicks) {
       // g_Ticks not yet initialized.
       return;
     }
 
-    g_Ticks.pTicks[ threadnum_ ] = MicroProfileEnter( g_ProfileWait );
+    g_Ticks.pTicks[ threadnum_ ] = MicroProfileEnter( g_ProfileWaitForNewTaskSuspend );
 }
 
-void waitStopCallback( uint32_t threadnum_ )
+void waitForNewTaskSuspendStopCallback( uint32_t threadnum_ )
 {
     if (!g_Ticks.pTicks) {
       // g_Ticks not yet initialized.
       return;
     }
-    MicroProfileLeave( g_ProfileWait, g_Ticks.pTicks[ threadnum_ ] );
+    MicroProfileLeave( g_ProfileWaitForNewTaskSuspend, g_Ticks.pTicks[ threadnum_ ] );
 }
-#endif
+
+MicroProfileToken g_ProfileWaitForTaskComplete = MicroProfileGetToken( "enkiTS", "waitForTaskComplete", 0xFF005050, MicroProfileTokenTypeCpu);
+void waitForTaskCompleteStartCallback( uint32_t threadnum_ )
+{
+    if (!g_Ticks.pTicks) {
+      // g_Ticks not yet initialized.
+      return;
+    }
+
+    g_Ticks.pTicks[ threadnum_ ] = MicroProfileEnter( g_ProfileWaitForTaskComplete );
+}
+
+void waitForTaskCompleteStopCallback( uint32_t threadnum_ )
+{
+    if (!g_Ticks.pTicks) {
+      // g_Ticks not yet initialized.
+      return;
+    }
+    MicroProfileLeave( g_ProfileWaitForTaskComplete, g_Ticks.pTicks[ threadnum_ ] );
+}
+
+MicroProfileToken g_ProfileWaitForTaskCompleteSuspend = MicroProfileGetToken( "enkiTS", "waitForTaskCompleteSuspend", 0xFF005090, MicroProfileTokenTypeCpu);
+void waitForTaskCompleteSuspendStartCallback( uint32_t threadnum_ )
+{
+    if (!g_Ticks.pTicks) {
+      // g_Ticks not yet initialized.
+      return;
+    }
+
+    g_Ticks.pTicks[ threadnum_ ] = MicroProfileEnter( g_ProfileWaitForTaskCompleteSuspend );
+}
+
+void waitForTaskCompleteSuspendStopCallback( uint32_t threadnum_ )
+{
+    if (!g_Ticks.pTicks) {
+      // g_Ticks not yet initialized.
+      return;
+    }
+    MicroProfileLeave( g_ProfileWaitForTaskCompleteSuspend, g_Ticks.pTicks[ threadnum_ ] );
+}
 
 static const int SUMS = 10*1024*1024;
 
@@ -264,9 +294,13 @@ int main(int argc, const char * argv[])
     profiler.nAllGroupsWanted = 1;
 
     // Set the callbacks BEFORE initialize or we will get no threadstart nor first waitStart calls
-    g_TS.GetProfilerCallbacks()->threadStart    = threadStartCallback;
-    g_TS.GetProfilerCallbacks()->waitStart      = waitStartCallback;
-    g_TS.GetProfilerCallbacks()->waitStop       = waitStopCallback;
+    g_TS.GetProfilerCallbacks()->threadStart                     = threadStartCallback;
+    g_TS.GetProfilerCallbacks()->waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
+    g_TS.GetProfilerCallbacks()->waitForNewTaskSuspendStop       = waitForNewTaskSuspendStopCallback;
+    g_TS.GetProfilerCallbacks()->waitForTaskCompleteStart        = waitForTaskCompleteStartCallback;
+    g_TS.GetProfilerCallbacks()->waitForTaskCompleteStop         = waitForTaskCompleteStopCallback;
+    g_TS.GetProfilerCallbacks()->waitForTaskCompleteSuspendStart = waitForTaskCompleteSuspendStartCallback;
+    g_TS.GetProfilerCallbacks()->waitForTaskCompleteSuspendStop  = waitForTaskCompleteSuspendStopCallback;
 
     profilerInit();
 	g_TS.Initialize();
@@ -275,6 +309,7 @@ int main(int argc, const char * argv[])
     ImVec4 clear_color = ImColor(114, 144, 154);
     while (!glfwWindowShouldClose(window))
     {
+        MICROPROFILE_SCOPEI("MainThread", "MainLoop", 0xFF555555 );
         glfwPollEvents();
 
         // Start the Dear ImGui frame
@@ -285,6 +320,7 @@ int main(int argc, const char * argv[])
 
 		ParallelReductionSumTaskSet m_ParallelReductionSumTaskSet( SUMS );
 		{
+            MICROPROFILE_SCOPEI("MainThread", "LaunchAndRunParallel", 0xFF555555 );
 
 			m_ParallelReductionSumTaskSet.Init();
 
@@ -331,12 +367,15 @@ int main(int argc, const char * argv[])
         }
 
         // Rendering
-        glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui::Render();
-        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-        glfwSwapBuffers(window);
+        {
+            MICROPROFILE_SCOPEI("MainThread", "Render", 0xFF882222 );
+            glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
+            glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+            glClear(GL_COLOR_BUFFER_BIT);
+            ImGui::Render();
+            ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+            glfwSwapBuffers(window);
+        }
 	}
 
 

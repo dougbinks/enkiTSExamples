@@ -104,12 +104,22 @@ void threadStartCallback( uint32_t threadnum_ )
     rmt_SetCurrentThreadName( out.str().c_str()  );
 }
 
-void waitStartCallback( uint32_t threadnum_ )
+void waitForNewTaskSuspendStartCallback( uint32_t threadnum_ )
 {
     rmt_BeginCPUSample(WAIT, 0);
 }
 
-void waitStopCallback( uint32_t threadnum_ )
+void waitForTaskCompleteStartCallback( uint32_t threadnum_ )
+{
+    rmt_BeginCPUSample(WAIT, 0);
+}
+
+void waitForTaskCompleteSuspendStartCallback( uint32_t threadnum_ )
+{
+    rmt_BeginCPUSample(WAIT, 0);
+}
+
+void stopCallback( uint32_t threadnum_ )
 {
     rmt_EndCPUSample();
 }
@@ -123,9 +133,13 @@ int main(int argc, const char * argv[])
 	rmt_CreateGlobalInstance(&rmt);
 
     // Set the callbacks BEFORE initialize or we will get no threadstart nor first waitStart calls
-    g_TS.GetProfilerCallbacks()->threadStart    = threadStartCallback;
-    g_TS.GetProfilerCallbacks()->waitStart      = waitStartCallback;
-    g_TS.GetProfilerCallbacks()->waitStop       = waitStopCallback;
+    g_TS.GetProfilerCallbacks()->threadStart                     = threadStartCallback;
+    g_TS.GetProfilerCallbacks()->waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
+    g_TS.GetProfilerCallbacks()->waitForNewTaskSuspendStop       = stopCallback;
+    g_TS.GetProfilerCallbacks()->waitForTaskCompleteStart        = waitForTaskCompleteStartCallback;
+    g_TS.GetProfilerCallbacks()->waitForTaskCompleteStop         = stopCallback;
+    g_TS.GetProfilerCallbacks()->waitForTaskCompleteSuspendStart = waitForTaskCompleteSuspendStartCallback;
+    g_TS.GetProfilerCallbacks()->waitForTaskCompleteSuspendStop  = stopCallback;
 
 	g_TS.Initialize();
 
