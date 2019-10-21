@@ -28,8 +28,11 @@
 
 using namespace enki;
 
-
 TaskScheduler g_TS;
+
+static const int RUNS = 1024*1024;
+static const int MINRANGE = 10 * 1024;
+static const int SUMS = 10*1024*1024;
 
 
 struct ParallelSumTaskSet : ITaskSet
@@ -43,7 +46,7 @@ struct ParallelSumTaskSet : ITaskSet
 	Count*    m_pPartialSums;
 	uint32_t  m_NumPartialSums;
 
-	ParallelSumTaskSet( uint32_t size_ ) : m_pPartialSums(NULL), m_NumPartialSums(0) { m_SetSize = size_; }
+	ParallelSumTaskSet( uint32_t size_ ) : m_pPartialSums(NULL), m_NumPartialSums(0) { m_SetSize = size_; m_MinRange = MINRANGE; }
 	virtual ~ParallelSumTaskSet()
 	{
 		delete[] m_pPartialSums;
@@ -124,12 +127,12 @@ void stopCallback( uint32_t threadnum_ )
     rmt_EndCPUSample();
 }
 
-static const int RUNS = 1024*1024;
-static const int SUMS = 10*1024*1024;
-
 int main(int argc, const char * argv[])
 {
-	Remotery* rmt;
+    // the example generates a lot of samples, so increase update rate for profiler
+    rmt_Settings()->maxNbMessagesPerUpdate  = 128 * rmt_Settings()->maxNbMessagesPerUpdate;
+
+    Remotery* rmt;
 	rmt_CreateGlobalInstance(&rmt);
 
     // Set the callbacks BEFORE initialize or we will get no threadstart nor first waitStart calls

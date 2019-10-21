@@ -27,6 +27,10 @@ enkiTaskScheduler*	pETS;
 enkiTaskSet*		pPSumTask;
 enkiTaskSet*		pPSumReductionTask;
 
+static const int RUNS = 1024 * 1024;
+static const int MINRANGE = 10 * 1024;
+static const int SUMS = 10 * 1024 * 1024;
+
 
 typedef struct ParallelSumTaskSetArgs
 {
@@ -72,7 +76,7 @@ void ParallelReductionSumTaskSet(  uint32_t start_, uint32_t end, uint32_t threa
 
 	ParallelSumTaskSetArgsInit( &args );
 
-	enkiAddTaskSetToPipe( pETS, pPSumTask, &args, (uint32_t)inMax_outSum);
+	enkiAddTaskSetToPipeMinRange( pETS, pPSumTask, &args, (uint32_t)inMax_outSum, MINRANGE );
 	enkiWaitForTaskSet( pETS, pPSumTask );
 
 	sum = 0;
@@ -82,7 +86,6 @@ void ParallelReductionSumTaskSet(  uint32_t start_, uint32_t end, uint32_t threa
 	}
 
 	free( args.pPartialSums );
-
 
 	*(uint64_t*)pArgs_ = sum;
 
@@ -128,9 +131,6 @@ void stopCallback( uint32_t threadnum_ )
     rmt_EndCPUSample();
 }
 
-static const int RUNS = 1024 * 1024;
-static const int SUMS = 10 * 1024 * 1024;
-
 int main(int argc, const char * argv[])
 {
     int run;
@@ -138,6 +138,8 @@ int main(int argc, const char * argv[])
     volatile uint64_t serialSum;
 	Remotery* rmt;
 
+    // the example generates a lot of samples, so increase update rate for profiler
+    rmt_Settings()->maxNbMessagesPerUpdate  = 128 * rmt_Settings()->maxNbMessagesPerUpdate;
 	rmt_CreateGlobalInstance(&rmt);
 
 	pETS = enkiNewTaskScheduler();

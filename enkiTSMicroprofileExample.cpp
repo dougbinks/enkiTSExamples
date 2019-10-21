@@ -44,6 +44,9 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 
+static const int MINRANGE = 10 * 1024;
+static const int SUMS = 10*1024*1024;
+
 // UI functions
 static ImDrawList*  g_pImDraw = 0;
 static ImVec2       g_DrawStart;
@@ -125,7 +128,7 @@ struct ParallelSumTaskSet : ITaskSet
 	Count*    m_pPartialSums;
 	uint32_t  m_NumPartialSums;
 
-	ParallelSumTaskSet( uint32_t size_ ) : m_pPartialSums(NULL), m_NumPartialSums(0) { m_SetSize = size_; }
+	ParallelSumTaskSet( uint32_t size_ ) : m_pPartialSums(NULL), m_NumPartialSums(0) { m_SetSize = size_; m_MinRange = MINRANGE; }
 	virtual ~ParallelSumTaskSet()
 	{
 		delete[] m_pPartialSums;
@@ -259,8 +262,6 @@ void waitForTaskCompleteSuspendStopCallback( uint32_t threadnum_ )
     }
     MicroProfileLeave( g_ProfileWaitForTaskCompleteSuspend, g_Ticks.pTicks[ threadnum_ ] );
 }
-
-static const int SUMS = 10*1024*1024;
 
 int main(int argc, const char * argv[])
 {
