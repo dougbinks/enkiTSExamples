@@ -294,17 +294,17 @@ int main(int argc, const char * argv[])
     profiler.nDisplay = MP_DRAW_DETAILED;
     profiler.nAllGroupsWanted = 1;
 
-    // Set the callbacks BEFORE initialize or we will get no threadstart nor first waitStart calls
-    g_TS.GetProfilerCallbacks()->threadStart                     = threadStartCallback;
-    g_TS.GetProfilerCallbacks()->waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
-    g_TS.GetProfilerCallbacks()->waitForNewTaskSuspendStop       = waitForNewTaskSuspendStopCallback;
-    g_TS.GetProfilerCallbacks()->waitForTaskCompleteStart        = waitForTaskCompleteStartCallback;
-    g_TS.GetProfilerCallbacks()->waitForTaskCompleteStop         = waitForTaskCompleteStopCallback;
-    g_TS.GetProfilerCallbacks()->waitForTaskCompleteSuspendStart = waitForTaskCompleteSuspendStartCallback;
-    g_TS.GetProfilerCallbacks()->waitForTaskCompleteSuspendStop  = waitForTaskCompleteSuspendStopCallback;
+    enki::TaskSchedulerConfig tsConfig;
+    tsConfig.profilerCallbacks.threadStart                     = threadStartCallback;
+    tsConfig.profilerCallbacks.waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
+    tsConfig.profilerCallbacks.waitForNewTaskSuspendStop       = waitForNewTaskSuspendStopCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteStart        = waitForTaskCompleteStartCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteStop         = waitForTaskCompleteStopCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteSuspendStart = waitForTaskCompleteSuspendStartCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteSuspendStop  = waitForTaskCompleteSuspendStopCallback;
 
     profilerInit();
-	g_TS.Initialize();
+	g_TS.Initialize( tsConfig );
 
 	double avSpeedUp = 0.0;
     ImVec4 clear_color = ImColor(114, 144, 154);

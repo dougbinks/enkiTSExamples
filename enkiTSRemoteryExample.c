@@ -143,16 +143,17 @@ int main(int argc, const char * argv[])
 	rmt_CreateGlobalInstance(&rmt);
 
 	pETS = enkiNewTaskScheduler();
+    struct enkiTaskSchedulerConfig tsConfig = enkiGetTaskSchedulerConfig( pETS );
 
-    enkiGetProfilerCallbacks( pETS )->threadStart                     = threadStartCallback;
-    enkiGetProfilerCallbacks( pETS )->waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
-    enkiGetProfilerCallbacks( pETS )->waitForNewTaskSuspendStop       = stopCallback;
-    enkiGetProfilerCallbacks( pETS )->waitForTaskCompleteStart        = waitForTaskCompleteStartCallback;
-    enkiGetProfilerCallbacks( pETS )->waitForTaskCompleteStop         = stopCallback;
-    enkiGetProfilerCallbacks( pETS )->waitForTaskCompleteSuspendStart = waitForTaskCompleteSuspendStartCallback;
-    enkiGetProfilerCallbacks( pETS )->waitForTaskCompleteSuspendStop  = stopCallback;
+    tsConfig.profilerCallbacks.threadStart                     = threadStartCallback;
+    tsConfig.profilerCallbacks.waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
+    tsConfig.profilerCallbacks.waitForNewTaskSuspendStop       = stopCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteStart        = waitForTaskCompleteStartCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteStop         = stopCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteSuspendStart = waitForTaskCompleteSuspendStartCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteSuspendStop  = stopCallback;
 
-    enkiInitTaskScheduler( pETS );
+    enkiInitTaskSchedulerWithConfig( pETS, tsConfig );
 
 	rmt_SetCurrentThreadName("Main");
 

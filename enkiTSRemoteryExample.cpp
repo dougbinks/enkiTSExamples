@@ -135,16 +135,16 @@ int main(int argc, const char * argv[])
     Remotery* rmt;
 	rmt_CreateGlobalInstance(&rmt);
 
-    // Set the callbacks BEFORE initialize or we will get no threadstart nor first waitStart calls
-    g_TS.GetProfilerCallbacks()->threadStart                     = threadStartCallback;
-    g_TS.GetProfilerCallbacks()->waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
-    g_TS.GetProfilerCallbacks()->waitForNewTaskSuspendStop       = stopCallback;
-    g_TS.GetProfilerCallbacks()->waitForTaskCompleteStart        = waitForTaskCompleteStartCallback;
-    g_TS.GetProfilerCallbacks()->waitForTaskCompleteStop         = stopCallback;
-    g_TS.GetProfilerCallbacks()->waitForTaskCompleteSuspendStart = waitForTaskCompleteSuspendStartCallback;
-    g_TS.GetProfilerCallbacks()->waitForTaskCompleteSuspendStop  = stopCallback;
+    enki::TaskSchedulerConfig tsConfig;
+    tsConfig.profilerCallbacks.threadStart                     = threadStartCallback;
+    tsConfig.profilerCallbacks.waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
+    tsConfig.profilerCallbacks.waitForNewTaskSuspendStop       = stopCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteStart        = waitForTaskCompleteStartCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteStop         = stopCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteSuspendStart = waitForTaskCompleteSuspendStartCallback;
+    tsConfig.profilerCallbacks.waitForTaskCompleteSuspendStop  = stopCallback;
 
-	g_TS.Initialize();
+	g_TS.Initialize( tsConfig );
 
 
 	rmt_SetCurrentThreadName("Main");
