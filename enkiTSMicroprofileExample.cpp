@@ -189,78 +189,61 @@ void threadStartCallback( uint32_t threadnum_ )
     MicroProfileOnThreadCreate( out.str().c_str()  );
 }
 
-// following is somewhat difficult way to get wait callbacks working, in a real application would a create macro
-
+// tickstore implements a stack the same size as Microprofiles, but continues to function
+// without reporting timings for deeper stacks
 struct TickStore
 {
-    TickStore() : pTicks(NULL) {}
-    ~TickStore() { delete[] pTicks; }
-    uint64_t* pTicks;
-} g_Ticks;
+    uint64_t tickStack[MICROPROFILE_STACK_MAX] = {0};
+    int32_t  tickStackNext                     = 0;
 
-void profilerInit()
-{
-    g_Ticks.pTicks = new uint64_t[ enki::GetNumHardwareThreads() ];
+    void ProfileEnter( MicroProfileToken token_ ) {
+        if( tickStackNext < MICROPROFILE_STACK_MAX ) {
+            tickStack[ tickStackNext ] = MicroProfileEnter( token_ );
+        }
+        ++tickStackNext;
+    }
+
+    void ProfileLeave( MicroProfileToken token_ ) {
+        assert( tickStackNext > 0 ); // unmatched enter/leave
+        --tickStackNext;
+        if( tickStackNext < MICROPROFILE_STACK_MAX ) {
+             MicroProfileLeave( token_, tickStack[ tickStackNext ] );
+        }
+    }
+};
+
+static TickStore* g_pTicks = NULL;
+
+void profilerInit() {
+    g_pTicks = new TickStore[ enki::GetNumHardwareThreads() ];
 }
 
 MicroProfileToken g_ProfileWaitForNewTaskSuspend = MicroProfileGetToken( "enkiTS", "waitForNewTaskSuspend", 0xFF505000, MicroProfileTokenTypeCpu);
-void waitForNewTaskSuspendStartCallback( uint32_t threadnum_ )
-{
-    if (!g_Ticks.pTicks) {
-      // g_Ticks not yet initialized.
-      return;
-    }
-
-    g_Ticks.pTicks[ threadnum_ ] = MicroProfileEnter( g_ProfileWaitForNewTaskSuspend );
+void waitForNewTaskSuspendStartCallback( uint32_t threadnum_ ) {
+    g_pTicks[ threadnum_ ].ProfileEnter( g_ProfileWaitForNewTaskSuspend );
 }
 
-void waitForNewTaskSuspendStopCallback( uint32_t threadnum_ )
-{
-    if (!g_Ticks.pTicks) {
-      // g_Ticks not yet initialized.
-      return;
-    }
-    MicroProfileLeave( g_ProfileWaitForNewTaskSuspend, g_Ticks.pTicks[ threadnum_ ] );
+void waitForNewTaskSuspendStopCallback( uint32_t threadnum_ ) {
+    g_pTicks[ threadnum_ ].ProfileLeave( g_ProfileWaitForNewTaskSuspend );
 }
 
 MicroProfileToken g_ProfileWaitForTaskComplete = MicroProfileGetToken( "enkiTS", "waitForTaskComplete", 0xFF005050, MicroProfileTokenTypeCpu);
-void waitForTaskCompleteStartCallback( uint32_t threadnum_ )
-{
-    if (!g_Ticks.pTicks) {
-      // g_Ticks not yet initialized.
-      return;
-    }
+void waitForTaskCompleteStartCallback( uint32_t threadnum_ ) {
 
-    g_Ticks.pTicks[ threadnum_ ] = MicroProfileEnter( g_ProfileWaitForTaskComplete );
+    g_pTicks[ threadnum_ ].ProfileEnter( g_ProfileWaitForTaskComplete );
 }
 
-void waitForTaskCompleteStopCallback( uint32_t threadnum_ )
-{
-    if (!g_Ticks.pTicks) {
-      // g_Ticks not yet initialized.
-      return;
-    }
-    MicroProfileLeave( g_ProfileWaitForTaskComplete, g_Ticks.pTicks[ threadnum_ ] );
+void waitForTaskCompleteStopCallback( uint32_t threadnum_ ) {
+    g_pTicks[ threadnum_ ].ProfileLeave( g_ProfileWaitForTaskComplete );
 }
 
 MicroProfileToken g_ProfileWaitForTaskCompleteSuspend = MicroProfileGetToken( "enkiTS", "waitForTaskCompleteSuspend", 0xFF005090, MicroProfileTokenTypeCpu);
-void waitForTaskCompleteSuspendStartCallback( uint32_t threadnum_ )
-{
-    if (!g_Ticks.pTicks) {
-      // g_Ticks not yet initialized.
-      return;
-    }
-
-    g_Ticks.pTicks[ threadnum_ ] = MicroProfileEnter( g_ProfileWaitForTaskCompleteSuspend );
+void waitForTaskCompleteSuspendStartCallback( uint32_t threadnum_ ) {
+    g_pTicks[ threadnum_ ].ProfileEnter( g_ProfileWaitForTaskCompleteSuspend );
 }
 
-void waitForTaskCompleteSuspendStopCallback( uint32_t threadnum_ )
-{
-    if (!g_Ticks.pTicks) {
-      // g_Ticks not yet initialized.
-      return;
-    }
-    MicroProfileLeave( g_ProfileWaitForTaskCompleteSuspend, g_Ticks.pTicks[ threadnum_ ] );
+void waitForTaskCompleteSuspendStopCallback( uint32_t threadnum_ ) {
+    g_pTicks[ threadnum_ ].ProfileLeave( g_ProfileWaitForTaskCompleteSuspend );
 }
 
 int main(int argc, const char * argv[])
