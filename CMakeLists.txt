@@ -47,7 +47,6 @@ if(APPLE)
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()
 if(WIN32)
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /d2Zi+" )
 endif()
 
 set( ENKITSMICROPROFILESAMPLE_SRC
