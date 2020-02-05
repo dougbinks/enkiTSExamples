@@ -36,12 +36,12 @@
 #include <assert.h>
 #include <string.h>
 #include <sstream>
+#include <stdlib.h>
 
 
 #include <imgui.h>
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl2.h"
-#include <stdio.h>
 #include <GLFW/glfw3.h>
 
 static const int MINRANGE = 10 * 1024;
