@@ -327,8 +327,8 @@ int main(int argc, const char * argv[])
         if(true)
         {
             MicroProfileFlip(NULL);
-            ImGui::SetNextWindowSize(ImVec2(1200,700), ImGuiSetCond_FirstUseEver);
-            ImGui::SetNextWindowPos(ImVec2(10,10), ImGuiSetCond_FirstUseEver);
+            ImGui::SetNextWindowSize(ImVec2(1200,700), ImGuiCond_FirstUseEver);
+            ImGui::SetNextWindowPos(ImVec2(10,10), ImGuiCond_FirstUseEver);
             ImGui::Begin( "Microprofile" );
                 
             g_pImDraw = ImGui::GetWindowDrawList();

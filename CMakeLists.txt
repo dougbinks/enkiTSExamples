@@ -58,6 +58,7 @@ set( ENKITSMICROPROFILESAMPLE_SRC
      imgui/imgui_internal.h
      imgui/imgui_demo.cpp
      imgui/imgui_draw.cpp
+     imgui/imgui_widgets.cpp
 	 imgui/imconfig.h
      imgui/examples/imgui_impl_glfw.h
      imgui/examples/imgui_impl_glfw.cpp
