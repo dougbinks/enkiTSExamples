@@ -10,6 +10,7 @@ include_directories("imgui")
 include_directories("microprofile")
 include_directories("glfw/include")
 include_directories("imgui/examples")
+include_directories( ${OPENGL_INCLUDE_DIRS} )
 
 set( ENKITS_BUILD_EXAMPLES OFF CACHE BOOL "Build basic example applications" )
 set( GLFW_BUILD_EXAMPLES OFF CACHE BOOL  "GLFW lib only" )
@@ -65,4 +66,4 @@ set( ENKITSMICROPROFILESAMPLE_SRC
      enkiTSMicroprofileExample.cpp
      )
 add_executable( enkiTSMicroprofileExample ${ENKITSMICROPROFILESAMPLE_SRC} )
-target_link_libraries(enkiTSMicroprofileExample enkiTS glfw ${GLFW_LIBRARIES} )
+target_link_libraries(enkiTSMicroprofileExample enkiTS ${OPENGL_LIBRARIES} glfw ${GLFW_LIBRARIES} )
