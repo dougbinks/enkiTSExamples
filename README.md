@@ -12,7 +12,7 @@ First [make sure you've cloned all submodules](https://git-scm.com/book/en/v2/Gi
 
 1. `mkdir build`
 2. `cmake ..`
-3. either run `make` or open `enkiTS.sln`
+3. either run `make` or on Windows with Visual Studio open `enkiTSExamples.sln`
 
 ## enki Task Scheduler Extended Samples
 
