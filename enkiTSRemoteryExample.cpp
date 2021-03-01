@@ -136,6 +136,7 @@ int main(int argc, const char * argv[])
 	rmt_CreateGlobalInstance(&rmt);
 
     enki::TaskSchedulerConfig tsConfig;
+	tsConfig.numTaskThreadsToCreate = 32;
     tsConfig.profilerCallbacks.threadStart                     = threadStartCallback;
     tsConfig.profilerCallbacks.waitForNewTaskSuspendStart      = waitForNewTaskSuspendStartCallback;
     tsConfig.profilerCallbacks.waitForNewTaskSuspendStop       = stopCallback;
