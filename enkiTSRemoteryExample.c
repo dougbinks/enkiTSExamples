@@ -102,7 +102,7 @@ static char* nameTable[] = {
     "enkiTS_50", "enkiTS_51", "enkiTS_52", "enkiTS_53", "enkiTS_54", "enkiTS_55", "enkiTS_56", "enkiTS_57", "enkiTS_58", "enkiTS_59",
     "enkiTS_60", "enkiTS_61", "enkiTS_62", "enkiTS_63", "enkiTS_64", "enkiTS_XX",
 };
-const size_t nameTableSize = sizeof( nameTable ) / sizeof( const char* );
+const uint32_t nameTableSize = (uint32_t)sizeof( nameTable ) / sizeof( const char* );
 
 void threadStartCallback( uint32_t threadnum_ )
 {
