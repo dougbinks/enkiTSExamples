@@ -164,7 +164,7 @@ int main(int argc, const char * argv[])
 	{
 		rmt_BeginCPUSample(Run, 0);
 
-		printf("Run %d.....\n", run);
+		printf("Run %d\t Open Remotery\\vis\\index.html to view profiler\n", run);
 
 		rmt_BeginCPUSample(Parallel, 0);
 		inMax_outSum = SUMS;
@@ -179,6 +179,15 @@ int main(int argc, const char * argv[])
 		{
 			serialSum += i + 1;
 		}
+		if( inMax_outSum == serialSum )
+		{
+			printf("Sums Correct.\n");
+		}
+		else
+		{
+			printf("Sums ERROR.\n");
+		}
+
 		rmt_EndCPUSample();
 
 		rmt_EndCPUSample();

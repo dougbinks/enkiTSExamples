@@ -154,7 +154,7 @@ int main(int argc, const char * argv[])
 	{
 		rmt_ScopedCPUSample(Run, 0);
 
-		printf("Run %d.....\n", run);
+		printf("Run %d\t Open Remotery\\vis\\index.html to view profiler\n", run);
 		ParallelReductionSumTaskSet m_ParallelReductionSumTaskSet( SUMS );
 		{
 			rmt_ScopedCPUSample(Parallel, 0);
@@ -168,13 +168,23 @@ int main(int argc, const char * argv[])
 
 
 
-		volatile uint64_t sum = 0;
+		uint64_t sum = 0;
 		{
 			rmt_ScopedCPUSample(Serial, 0);
 			for (uint64_t i = 0; i < (uint64_t)m_ParallelReductionSumTaskSet.m_ParallelSumTaskSet.m_SetSize; ++i)
 			{
 				sum += i + 1;
 			}
+		}
+		printf("Sun Parallel:  %" PRIu64 ", sum serial %" PRIu64, m_ParallelReductionSumTaskSet.m_FinalSum, sum );
+		if( m_ParallelReductionSumTaskSet.m_FinalSum == sum )
+		{
+			printf(" - Sums Correct.\n");
+		}
+		else
+		{
+			assert(false);
+			printf(" - Sums ERROR.\n");
 		}
 
 	}
