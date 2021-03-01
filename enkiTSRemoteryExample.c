@@ -76,7 +76,7 @@ void ParallelReductionSumTaskSet(  uint32_t start_, uint32_t end, uint32_t threa
 
 	ParallelSumTaskSetArgsInit( &args );
 
-	enkiAddTaskSetToPipeMinRange( pETS, pPSumTask, &args, (uint32_t)inMax_outSum, MINRANGE );
+	enkiAddTaskSetMinRange( pETS, pPSumTask, &args, (uint32_t)inMax_outSum, MINRANGE );
 	enkiWaitForTaskSet( pETS, pPSumTask );
 
 	sum = 0;
@@ -168,7 +168,7 @@ int main(int argc, const char * argv[])
 
 		rmt_BeginCPUSample(Parallel, 0);
 		inMax_outSum = SUMS;
-		enkiAddTaskSetToPipe(pETS, pPSumReductionTask, &inMax_outSum, 1);
+		enkiAddTaskSet(pETS, pPSumReductionTask, &inMax_outSum, 1);
 		enkiWaitForTaskSet(pETS, pPSumReductionTask);
 		rmt_EndCPUSample();
 
