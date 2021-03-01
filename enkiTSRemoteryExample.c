@@ -168,7 +168,7 @@ int main(int argc, const char * argv[])
 
 		rmt_BeginCPUSample(Parallel, 0);
 		inMax_outSum = SUMS;
-		enkiAddTaskSet(pETS, pPSumReductionTask, &inMax_outSum, 1);
+		enkiAddTaskSetArgs(pETS, pPSumReductionTask, &inMax_outSum, 1);
 		enkiWaitForTaskSet(pETS, pPSumReductionTask);
 		rmt_EndCPUSample();
 
