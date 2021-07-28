@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project( enkiTSExamples )
 
-find_package(OpenGL REQUIRED)
+find_package(OpenGL)
 
 include_directories("enkiTS/src")
 include_directories("Remotery/lib")
@@ -19,7 +19,10 @@ set( GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only" )
 set( GLFW_BUILD_INSTALL OFF CACHE BOOL  "GLFW lib only" )
 
 add_subdirectory( enkiTS )
-add_subdirectory( glfw )
+
+if(OpenGL_FOUND)
+	add_subdirectory( glfw )
+endif()
 
 set( ENKITSREMOTERYSAMPLE_SRC
      enkiTSRemoteryExample.cpp
@@ -50,24 +53,26 @@ if( MSVC )
     SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup" )
 endif()
 
-set( ENKITSMICROPROFILESAMPLE_SRC
-	 microprofile/microprofile.h
- 	 microprofile/microprofileui.h
-     imgui/imgui.h
-     imgui/imgui.cpp
-     imgui/imgui_internal.h
-     imgui/imgui_demo.cpp
-     imgui/imgui_draw.cpp
-     imgui/imgui_widgets.cpp
-	 imgui/imconfig.h
-     imgui/examples/imgui_impl_glfw.h
-     imgui/examples/imgui_impl_glfw.cpp
-     imgui/examples/imgui_impl_opengl2.h
-     imgui/examples/imgui_impl_opengl2.cpp
-     enkiTSMicroprofileExample.cpp
-     )
-add_executable( enkiTSMicroprofileExample WIN32 ${ENKITSMICROPROFILESAMPLE_SRC} )
-target_link_libraries(enkiTSMicroprofileExample enkiTS ${OPENGL_LIBRARIES} glfw ${GLFW_LIBRARIES} )
+if(OpenGL_FOUND)
+	set( ENKITSMICROPROFILESAMPLE_SRC
+		 microprofile/microprofile.h
+		 microprofile/microprofileui.h
+		 imgui/imgui.h
+		 imgui/imgui.cpp
+		 imgui/imgui_internal.h
+		 imgui/imgui_demo.cpp
+		 imgui/imgui_draw.cpp
+		 imgui/imgui_widgets.cpp
+		 imgui/imconfig.h
+		 imgui/examples/imgui_impl_glfw.h
+		 imgui/examples/imgui_impl_glfw.cpp
+		 imgui/examples/imgui_impl_opengl2.h
+		 imgui/examples/imgui_impl_opengl2.cpp
+		 enkiTSMicroprofileExample.cpp
+		 )
+	add_executable( enkiTSMicroprofileExample WIN32 ${ENKITSMICROPROFILESAMPLE_SRC} )
+	target_link_libraries(enkiTSMicroprofileExample enkiTS ${OPENGL_LIBRARIES} glfw ${GLFW_LIBRARIES} )
+endif()
 
 if( MSVC )
     if(${CMAKE_VERSION} VERSION_LESS "3.6.0") 
